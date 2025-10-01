@@ -41,9 +41,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,70 +74,40 @@ class MainActivity : ComponentActivity() {
 @Composable
 @Preview
 fun Screen() {
-  val textVisibleState = remember {
-    mutableStateOf(true)
-  }
-
-  val textState = remember {
-    mutableStateOf("")
-  }
-
   Column(
     modifier = Modifier.fillMaxSize(),
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center,
   ) {
-    var textInput by remember {
-      mutableStateOf("")
-    }
-    val textInput2 = TextFieldState(initialText = "")
-    TextField(
-      value = textInput,
-      onValueChange = { newText ->
-        textInput = newText
-      }
-    )
-
-    Spacer(modifier = Modifier.height(32.dp))
-
-    TextField(
-      value = textInput,
-      onValueChange = {
-        textInput = it
+    Text(
+      text = buildAnnotatedString {
+        append("Hello, Jetpack Compose!")
+        withStyle(
+          SpanStyle(
+            color = Color.Red,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 30.sp
+          )
+        ) {
+          append(" Welcome to the world of Android development.")
+        }
+        append(" Let's build something amazing together.")
       },
-      label = {
-        Text(text = "Search")
-      },
-      placeholder = {
-        Text(text = "Search here...")
-      },
-      leadingIcon = {
-        Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon")
-      }
+      fontSize = 24.sp,
+      color = MaterialTheme.colorScheme.primary,
+      fontWeight = FontWeight.Bold,
+      fontStyle = FontStyle.Italic,
+      textDecoration = TextDecoration.Underline,
+      textAlign = TextAlign.Center,
+      maxLines = 10,
+      overflow = TextOverflow.Ellipsis,
+      style = TextStyle(
+        shadow = Shadow(
+          color = Color.Gray,
+          blurRadius = 14f,
+          offset = Offset(x = 5f, y = 2f)
+        )
+      )
     )
-
-    Spacer(modifier = Modifier.height(32.dp))
-
-    BasicTextField(
-//      value = textInput,
-//      onValueChange = {
-//        textInput = it
-//      },
-      state = textInput2,
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 40.dp)
-        .clip(RoundedCornerShape(50.dp))
-        .background(MaterialTheme.colorScheme.primaryContainer)
-        .padding(16.dp),
-      cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-//      maxLines = 1,
-//      singleLine = true,
-      textStyle = TextStyle(
-        color = MaterialTheme.colorScheme.onBackground,
-        fontSize = 18.sp,
-      ),
-    )
-
   }
 }
