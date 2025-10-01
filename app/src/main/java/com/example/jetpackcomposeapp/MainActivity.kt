@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -21,7 +22,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,11 +39,7 @@ class MainActivity : ComponentActivity() {
     enableEdgeToEdge()
     setContent {
       JetpackComposeAppTheme {
-        Scaffold(
-          modifier = Modifier.fillMaxSize(),
-          content = { innerPadding ->
-            FirstUi(modifier = Modifier.padding(innerPadding))
-          })
+        Screen()
       }
     }
   }
@@ -46,94 +47,38 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 @Preview
-fun FirstUi(modifier: Modifier = Modifier) {
+fun Screen() {
+  val textVisibleState = remember {
+    mutableStateOf(true)
+  }
+
+  val textState = remember {
+    mutableStateOf("")
+  }
+
   Column(
-    modifier = modifier
-        .fillMaxWidth()
-        .fillMaxHeight(0.5f)
-        .clip(RoundedCornerShape(24.dp))
-        .padding(24.dp)
-        .background(MaterialTheme.colorScheme.primaryContainer)
-        .verticalScroll(rememberScrollState())
+    modifier = Modifier.fillMaxSize(),
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.Center,
   ) {
-    Button(
-      modifier = modifier.padding(20.dp),
-      onClick = {}) {
-      Text(text = "Button 1")
+    if (textVisibleState.value) {
+      Text(text = "I am Visible Text")
+      Spacer(Modifier.height(40.dp))
     }
 
-    Button(
-      onClick = {}) {
-      Text(text = "Button 2")
+    textState.value = if (textVisibleState.value) "Visible Text" else "Invisible Text"
+
+    Text(
+      modifier = Modifier.alpha(
+        if (textVisibleState.value) 1f else 0.3f
+      ), text = textState.value
+    )
+
+    Spacer(modifier = Modifier.height(50.dp))
+    Button(onClick = {
+      textVisibleState.value = !textVisibleState.value
+    }) {
+      Text("Change text visibility")
     }
-
-    Spacer(modifier = modifier.height(40.dp))
-
-    Button(
-      modifier = modifier.padding(20.dp),
-      onClick = {}) {
-      Text(text = "Button 1")
-    }
-
-    Button(
-      onClick = {}) {
-      Text(text = "Button 2")
-    }
-
-    Button(
-      modifier = modifier.padding(20.dp),
-      onClick = {}) {
-      Text(text = "Button 1")
-    }
-
-    Button(
-      onClick = {}) {
-      Text(text = "Button 2")
-    }
-
-    Button(
-      modifier = modifier.padding(20.dp),
-      onClick = {}) {
-      Text(text = "Button 1")
-    }
-
-    Button(
-      onClick = {}) {
-      Text(text = "Button 2")
-    }
-
-    Button(
-      modifier = modifier.padding(20.dp),
-      onClick = {}) {
-      Text(text = "Button 1")
-    }
-
-    Button(
-      onClick = {}) {
-      Text(text = "Button 2")
-    }
-
-    Button(
-      modifier = modifier.padding(20.dp),
-      onClick = {}) {
-      Text(text = "Button 1")
-    }
-
-    Button(
-      onClick = {}) {
-      Text(text = "Button 2")
-    }
-
-    Button(
-      modifier = modifier.padding(20.dp),
-      onClick = {}) {
-      Text(text = "Button 1")
-    }
-
-    Button(
-      onClick = {}) {
-      Text(text = "Button 2")
-    }
-
   }
 }
