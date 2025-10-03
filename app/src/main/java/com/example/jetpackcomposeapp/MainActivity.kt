@@ -4,7 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Category
@@ -32,6 +39,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.jetpackcomposeapp.ui.theme.JetpackComposeAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,98 +50,58 @@ class MainActivity : ComponentActivity() {
     enableEdgeToEdge()
     setContent {
       JetpackComposeAppTheme {
-        var selectedNavItem by remember {
-          mutableIntStateOf(0)
-        }
-        Scaffold(
-          modifier = Modifier.fillMaxSize(),
-          bottomBar = {
-            NavigationBar {
-              bottomNavItems.forEachIndexed { index, item ->
-                NavigationBarItem(
-                  selected = index == selectedNavItem,
-                  onClick = {
-                    selectedNavItem = index
-//                    navController.navigate(item.route)
-                  },
-                  icon = {
-                    BadgedBox(
-                      badge = {
-                        if (item.badges != 0) {
-                          Badge {
-                            Text(text = item.badges.toString())
-                          }
-                        } else if (item.hasNews) {
-                          Badge()
-                        }
-                      }
-                    ) {
-                      Icon(
-                        imageVector = if (index == selectedNavItem) {
-                          item.selectedIcon
-                        } else {
-                          item.unselectedIcon
-                        },
-                        contentDescription = item.title
-                      )
-                    }
-                  },
-                  label = {
-                    Text(text = item.title)
-                  }
-                )
-              }
+        Scaffold { innerPadding ->
+          LazyColumn(
+            modifier = Modifier
+              .fillMaxSize()
+              .padding(innerPadding)
+          ) {
+            itemsIndexed(
+              listOf<String>(
+                "This",
+                "is",
+                "Jetpack",
+                "Compose",
+                "items",
+                "indexed",
+                "2",
+                "This",
+                "is",
+                "Jetpack",
+                "Compose",
+                "items",
+                "indexed",
+                "3",
+                "This",
+                "is",
+                "Jetpack",
+                "Compose",
+                "items",
+                "indexed"
+              )
+            ) { index, string ->
+              Text(
+                text = string,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .padding(vertical = 24.dp, horizontal = 24.dp)
+              )
             }
+//            items(5000) {
+//              Text(
+//                text = "Item $it",
+//                fontSize = 20.sp,
+//                textAlign = TextAlign.Center,
+//                modifier = Modifier
+//                  .fillMaxWidth()
+//                  .padding(vertical = 24.dp, horizontal = 24.dp)
+//              )
+//            }
           }
-        ) {
-          it
         }
-//        Screen()
       }
     }
   }
 }
-
-data class BottomNavItem(
-  val title: String,
-  val route: String,
-  val selectedIcon: ImageVector,
-  val unselectedIcon: ImageVector,
-  val badges: Int = 0,
-  val hasNews: Boolean = false
-)
-
-val bottomNavItems = listOf<BottomNavItem>(
-  BottomNavItem(
-    title = "Home",
-    route = "home",
-    selectedIcon = Icons.Filled.Home,
-    unselectedIcon = Icons.Outlined.Home,
-    badges = 0,
-    hasNews = false
-  ),
-  BottomNavItem(
-    title = "Posts",
-    route = "posts",
-    selectedIcon = Icons.Filled.Category,
-    unselectedIcon = Icons.Outlined.Category,
-    badges = 0,
-    hasNews = false
-  ),
-  BottomNavItem(
-    title = "Notifications",
-    route = "notifications",
-    selectedIcon = Icons.Filled.Notifications,
-    unselectedIcon = Icons.Outlined.Notifications,
-    badges = 5,
-    hasNews = true
-  ),
-  BottomNavItem(
-    title = "Profile",
-    route = "profile",
-    selectedIcon = Icons.Filled.AccountCircle,
-    unselectedIcon = Icons.Outlined.AccountCircle,
-    badges = 0,
-    hasNews = true
-  ),
-)
